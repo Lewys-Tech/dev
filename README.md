@@ -32,5 +32,31 @@ A robust, Django REST Framework-based API for managing a library system. This pr
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/<your_username>/<your_repository>.git
-   cd <your_repository>
+   git clone https://github.com/Lewys-Tech/dev.git
+
+
+2.Create and Activate a Virtual Environment:
+
+python -m venv web_app
+
+source web_app/bin/activate      # On Unix or MacOS
+
+web_app\Scripts\activate         # On Windows
+
+
+3.Install Dependencies
+
+pip install -r requirements.
+
+4.Apply Migrations:
+
+python manage.py migrate
+
+5.Create a Superuser (for admin access):
+
+python manage.py createsuperuser
+
+6.Run the Development Server:
+
+python manage.py runserver
+
