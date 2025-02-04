@@ -68,6 +68,7 @@ Django Settings:
 The project uses Django REST Framework along with token authentication. Ensure that in your settings.py, you have:
 
 INSTALLED_APPS = [
+
     # ...
     'rest_framework',
     'rest_framework.authtoken',
@@ -78,6 +79,7 @@ INSTALLED_APPS = [
 ]
 
 REST_FRAMEWORK = {
+
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
