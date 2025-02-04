@@ -60,3 +60,31 @@ python manage.py createsuperuser
 
 python manage.py runserver
 
+
+
+Configuration
+
+Django Settings:
+The project uses Django REST Framework along with token authentication. Ensure that in your settings.py, you have:
+
+INSTALLED_APPS = [
+    # ...
+    'rest_framework',
+    'rest_framework.authtoken',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'user',  # Your app managing user models
+    # other apps...
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ]
+}
+
+
