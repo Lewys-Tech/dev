@@ -132,12 +132,20 @@ API Endpoints
 Users
 
 GET /api/users/
+
 List all users.
+
 POST /api/users/
+
 Create a new user.
+
 GET /api/users/<user_id>/
+
 Retrieve a specific user.
+
 PUT/PATCH /api/users/<user_id>/
+
 Update a specific user.
+
 DELETE /api/users/<user_id>/
 Delete a user.
