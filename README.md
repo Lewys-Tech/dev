@@ -116,10 +116,28 @@ Access the Admin Panel:
 Go to http://127.0.0.1:8000/admin/ to manage users and other models via Django's built-in admin.
 
 Test API Endpoints via Browsable API:
-Visit http://127.0.0.1:8000/api/users/ to interact with the user API. Use http://127.0.0.1:8000/api-auth/login/ for session-based authentication.
+Visit http://127.0.0.1:8000/api/users/ to interact with the user API. 
+
+Use http://127.0.0.1:8000/api-auth/login/ for session-based authentication.
 
 Obtain a Token:
 
 Send a POST request to the token endpoint:
 
 curl -X POST -d "username=admin&password=yourpassword" http://127.0.0.1:8000/api-token-auth/
+
+
+API Endpoints
+
+Users
+
+GET /api/users/
+List all users.
+POST /api/users/
+Create a new user.
+GET /api/users/<user_id>/
+Retrieve a specific user.
+PUT/PATCH /api/users/<user_id>/
+Update a specific user.
+DELETE /api/users/<user_id>/
+Delete a user.
