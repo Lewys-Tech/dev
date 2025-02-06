@@ -102,4 +102,20 @@ class Staff(models.Model):
     
 
 
+class OtherUser(models.Model):
+    # The primary key is also a foreign key to the User model (referenced via settings.AUTH_USER_MODEL)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        related_name='other_user_profile'
+    )
+    user_no = models.CharField(max_length=50)  # VARCHAR NOT NULL
+    residence = models.TextField(blank=True, null=True)
+    age = models.PositiveIntegerField(blank=True, null=True)
+    gender = models.CharField(max_length=50, blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    
+    def __str__(self):
+        return f"OtherUser: {self.user_no} - {self.user}"
    

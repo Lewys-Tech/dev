@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from .models import User, Student, Staff
-from .serializers import UserSerializer, StudentSerializer, StaffSerializer
+from .models import User, Student, Staff, OtherUser
+from .serializers import UserSerializer, StudentSerializer, StaffSerializer, OtherUserSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -32,4 +32,12 @@ class StaffViewSet(viewsets.ModelViewSet):
     """
     queryset = Staff.objects.all().order_by('-created_at')
     serializer_class = StaffSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+class OtherUserViewSet(viewsets.ModelViewSet):
+    """
+    A viewset that provides standard CRUD actions for OtherUser.
+    """
+    queryset = OtherUser.objects.all().order_by('-user__user_id')
+    serializer_class = OtherUserSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]

@@ -1,7 +1,7 @@
 # users/serializers.py
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import User, Student, Staff
+from .models import User, Student, Staff, OtherUser
 
 User = get_user_model()
 
@@ -69,3 +69,18 @@ class StaffSerializer(serializers.ModelSerializer):
             'updated_at',
         ]
         read_only_fields = ['created_at', 'updated_at']
+
+
+class OtherUserSerializer(serializers.ModelSerializer):
+    # Provide a nested, read-only representation of the associated user
+    user = UserSerializer(read_only=True)
+    # Allow the client to set the user by primary key when creating/updating an OtherUser record.
+    user_id = serializers.PrimaryKeyRelatedField(
+        source='user',
+        write_only=True,
+        queryset=User.objects.all()
+    )
+    
+    class Meta:
+        model = OtherUser
+        fields = ['user', 'user_id', 'user_no', 'residence', 'age', 'gender', 'phone']
