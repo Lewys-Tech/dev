@@ -1,14 +1,51 @@
 from django.db import models
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.conf import settings
 
-class User(models.Model):
+
+class UserManager(BaseUserManager):
+    def create_user(self, email, first_name, second_name, password=None, **extra_fields):
+        """
+        Creates and saves a User with the given email, first name, second name, and password.
+        """
+        if not email:
+            raise ValueError("The Email field must be set")
+        email = self.normalize_email(email)
+        user = self.model(
+            email=email,
+            first_name=first_name,
+            second_name=second_name,
+            **extra_fields
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, first_name, second_name, password, **extra_fields):
+        """
+        Creates and saves a superuser with the given email, first name, second name, and password.
+        """
+        
+        extra_fields.setdefault('is_active', True)
+
+        
+
+        return self.create_user(email, first_name, second_name, password, **extra_fields)
+
+    def get_by_natural_key(self, email):
+        """
+        Allows authentication using the natural key (email).
+        """
+        return self.get(email=email)
+
+
+class User(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)
-    
+
     first_name = models.CharField(max_length=100)
     second_name = models.CharField(max_length=100)
-    
-    email = models.EmailField(unique=True, null=True, blank=True)
+
+    email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20, unique=True, null=True, blank=True)
 
     USER_ROLE_CHOICES = [
@@ -18,42 +55,23 @@ class User(models.Model):
     ]
     user_role = models.CharField(max_length=20, choices=USER_ROLE_CHOICES)
 
-    password = models.CharField(max_length=128)  # Stores hashed passwords
-    
-    is_active = models.BooleanField(default=True)  # Required for authentication
-    is_staff = models.BooleanField(default=False)  # Required for admin access
-    is_superuser = models.BooleanField(default=False)  # For superuser permissions
-    
     status = models.CharField(max_length=20, default='Active')
+
+    # Required for Django's admin and authentication:
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # Required attributes for Django's authentication system:
+    objects = UserManager()
+
+    # Set email as the unique identifier for authentication.
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'second_name']
 
-    def set_password(self, raw_password):
-        """Hashes and sets the user's password."""
-        self.password = make_password(raw_password)
-        self.save()
-
-    def check_password(self, raw_password):
-        """Checks the given password against the stored hashed password."""
-        return check_password(raw_password, self.password)
-    
-     # These properties help Django's authentication system work as expected.
-    @property
-    def is_authenticated(self):
-        return True
-
-    @property
-    def is_anonymous(self):
-        return False
-
     def __str__(self):
         return f"{self.first_name} {self.second_name} ({self.user_role})"
-
 
 
 
@@ -62,7 +80,6 @@ class Student(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
-        primary_key=True,
         related_name='student_profile'
     )
     
@@ -85,7 +102,6 @@ class Staff(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        primary_key=True,
         related_name='staff_profile'
     )
     
@@ -107,7 +123,6 @@ class OtherUser(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        primary_key=True,
         related_name='other_user_profile'
     )
     user_no = models.CharField(max_length=50)  # VARCHAR NOT NULL

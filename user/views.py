@@ -24,6 +24,10 @@ class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+    def perform_create(self, serializer):
+        # Automatically assign the current logged-in user to the student
+        serializer.save(user=self.request.user)
+
 
 class StaffViewSet(viewsets.ModelViewSet):
     """
@@ -34,6 +38,9 @@ class StaffViewSet(viewsets.ModelViewSet):
     serializer_class = StaffSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 class OtherUserViewSet(viewsets.ModelViewSet):
     """
     A viewset that provides standard CRUD actions for OtherUser.
@@ -41,3 +48,7 @@ class OtherUserViewSet(viewsets.ModelViewSet):
     queryset = OtherUser.objects.all().order_by('-user__user_id')
     serializer_class = OtherUserSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+        
