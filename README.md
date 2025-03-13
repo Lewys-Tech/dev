@@ -1,4 +1,4 @@
-# Library Management API
+# Library Management API Build With DjangoRestFramework
 
 A robust, Django REST Framework-based API for managing a library system. This project provides endpoints for managing users, students, staff, other user types, and books, with token-based authentication and a browsable API interface for easy testing.
 
